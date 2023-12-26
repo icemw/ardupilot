@@ -691,6 +691,11 @@ public:
     AP_Float pldp_range_finder_minimum_m;
     AP_Float pldp_delay_s;
     AP_Float pldp_descent_speed_ms;
+    
+#if MODE_DRAWSTAR_ENABLED == ENABLED
+    AP_Float star_radius_cm;
+#endif
+
 };
 
 extern const AP_Param::Info        var_info[];

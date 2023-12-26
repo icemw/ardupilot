@@ -284,6 +284,7 @@ const AP_Param::Info Copter::var_info[] = {
     // @DisplayName: Flight Mode 6
     // @Description: Flight mode when pwm of Flightmode channel(FLTMODE_CH) is >=1750
     GSCALAR(flight_mode6, "FLTMODE6",               (uint8_t)FLIGHT_MODE_6),
+    //GSCALAR(flight_mode6, "FLTMODE6",               (uint8_t)Mode::Number::DRAWSTAR),
 
     // @Param: FLTMODE_CH
     // @DisplayName: Flightmode channel
@@ -1160,6 +1161,14 @@ const AP_Param::GroupInfo ParametersG2::var_info[] = {
 
     // ID 62 is reserved for the SHOW_... parameters from the Skybrush fork at
     // https://github.com/skybrush-io/ardupilot
+
+    // @Param: STAR_RADIUS_CM
+    // @DisplayName: Surface Tracking Filter Time Constant
+    // @Description: Time to achieve 63.2% of the surface altitude measurement change.  If 0 filtering is disabled
+    // @Units: s
+    // @Range: 0 5
+    // @User: Advanced
+    AP_GROUPINFO("STAR_R_CM", 63, ParametersG2, star_radius_cm, 1000),
 
     AP_GROUPEND
 };

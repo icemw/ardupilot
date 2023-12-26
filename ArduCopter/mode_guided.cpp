@@ -60,12 +60,12 @@ void ModeGuided::run()
     // call the correct auto controller
     switch (guided_mode) {
 
-    case SubMode::TakeOff:
+    case SubMode::TakeOff:  //起飞
         // run takeoff controller
         takeoff_run();
         break;
-
-    case SubMode::WP:
+    //后续飞行模式开发主要使用航点/位置控制
+    case SubMode::WP:       //航点
         // run waypoint controller
         wp_control_run();
         if (send_notification && wp_nav->reached_wp_destination()) {
@@ -74,7 +74,7 @@ void ModeGuided::run()
         }
         break;
 
-    case SubMode::Pos:
+    case SubMode::Pos:      //位置
         // run position controller
         pos_control_run();
         break;
@@ -693,9 +693,9 @@ void ModeGuided::pos_control_run()
     guided_vel_target_cms.zero();
 
     // stop rotating if no updates received within timeout_ms
-    if (millis() - update_time_ms > get_timeout_ms()) {
+    if (millis() - update_time_ms > get_timeout_ms()) { //如果当前时间-上次更新时间超时，则设置偏航为HOLD模式，角速度为0
         if ((auto_yaw.mode() == AutoYaw::Mode::RATE) || (auto_yaw.mode() == AutoYaw::Mode::ANGLE_RATE)) {
-            auto_yaw.set_mode(AutoYaw::Mode::HOLD);
+            auto_yaw.set_mode(AutoYaw::Mode::HOLD); //只有偏航角在RATE或ANGLE_RATE模式下才设置为HOLD模式
         }
     }
 
