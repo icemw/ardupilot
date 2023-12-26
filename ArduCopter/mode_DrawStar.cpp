@@ -69,13 +69,13 @@ void ModeDrawStar::pos_control_run()  // 注意，此函数直接从mode_guided.
         // get pilot's desired yaw rate
         target_yaw_rate = get_pilot_desired_yaw_rate(channel_yaw->get_control_in());
         if (!is_zero(target_yaw_rate)) {
-            auto_yaw.set_mode(AUTO_YAW_HOLD);
+            auto_yaw.set_mode(AutoYaw::Mode::HOLD);
         }
     }
 
     // if not armed set throttle to zero and exit immediately
     if (is_disarmed_or_landed()) {
-        make_safe_spool_down();
+        make_safe_ground_handling(copter.is_tradheli() && motors->get_interlock());
         return;
     }
 
@@ -89,16 +89,17 @@ void ModeDrawStar::pos_control_run()  // 注意，此函数直接从mode_guided.
     pos_control->update_z_controller();
 
     // call attitude controller
-    if (auto_yaw.mode() == AUTO_YAW_HOLD) {
-        // roll & pitch from waypoint controller, yaw rate from pilot
-        attitude_control->input_euler_angle_roll_pitch_euler_rate_yaw(wp_nav->get_roll(), wp_nav->get_pitch(), target_yaw_rate);
-    } else if (auto_yaw.mode() == AUTO_YAW_RATE) {
-        // roll & pitch from waypoint controller, yaw rate from mavlink command or mission item
-        attitude_control->input_euler_angle_roll_pitch_euler_rate_yaw(wp_nav->get_roll(), wp_nav->get_pitch(), auto_yaw.rate_cds());
-    } else {
-        // roll, pitch from waypoint controller, yaw heading from GCS or auto_heading()
-        attitude_control->input_euler_angle_roll_pitch_yaw(wp_nav->get_roll(), wp_nav->get_pitch(), auto_yaw.yaw(), true);
-    }
+    attitude_control->input_thrust_vector_heading(pos_control->get_thrust_vector(), auto_yaw.get_heading());
+    // if (auto_yaw.mode() == AutoYaw::Mode::HOLD) {
+    //     // roll & pitch from waypoint controller, yaw rate from pilot
+    //     attitude_control->input_euler_angle_roll_pitch_euler_rate_yaw(wp_nav->get_roll(), wp_nav->get_pitch(), target_yaw_rate);
+    // } else if (auto_yaw.mode() == AutoYaw::Mode::RATE) {
+    //     // roll & pitch from waypoint controller, yaw rate from mavlink command or mission item
+    //     attitude_control->input_euler_angle_roll_pitch_euler_rate_yaw(wp_nav->get_roll(), wp_nav->get_pitch(), auto_yaw.rate_cds());
+    // } else {
+    //     // roll, pitch from waypoint controller, yaw heading from GCS or auto_heading()
+    //     attitude_control->input_euler_angle_roll_pitch_yaw(wp_nav->get_roll(), wp_nav->get_pitch(), auto_yaw.yaw(), true);
+    // }
 }
 
 #endif
