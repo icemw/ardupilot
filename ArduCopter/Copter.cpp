@@ -256,6 +256,8 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
 #if STATS_ENABLED == ENABLED
     SCHED_TASK_CLASS(AP_Stats,             &copter.g2.stats,            update,           1, 100, 171),
 #endif
+
+    SCHED_TASK_CLASS(AP_Pod,               &copter.pod,                 update,          400,   100, 10),
 };
 
 void Copter::get_scheduler_tasks(const AP_Scheduler::Task *&tasks,
@@ -643,6 +645,9 @@ void Copter::one_hz_loop()
 #endif
 
     AP_Notify::flags.flying = !ap.land_complete;
+
+    gcs().send_text(MAV_SEVERITY_CRITICAL, "Pod roll angle: %d pitch angle: %d",
+    pod.angle_roll , pod.angle_pitch);
 }
 
 void Copter::init_simple_bearing()
