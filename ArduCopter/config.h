@@ -205,9 +205,9 @@
 #endif
 
 //////////////////////////////////////////////////////////////////////////////
-// DrawStar mode - control vehicle's position to draw star
-#ifndef MODE_DRAWSTAR_ENABLED
-# define MODE_DRAWSTAR_ENABLED ENABLED
+// TRACK mode - control vehicle's position to draw star
+#ifndef MODE_TRACK_ENABLED
+# define MODE_TRACK_ENABLED DISABLED
 #endif
 
 //////////////////////////////////////////////////////////////////////////////

@@ -692,9 +692,9 @@ public:
     AP_Float pldp_delay_s;
     AP_Float pldp_descent_speed_ms;
     
-#if MODE_DRAWSTAR_ENABLED == ENABLED
-    AP_Float star_radius_cm;
-#endif
+// #if MODE_DRAWSTAR_ENABLED == ENABLED
+//     AP_Float star_radius_cm;
+// #endif
 
 };
 

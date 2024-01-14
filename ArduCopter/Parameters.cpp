@@ -595,6 +595,11 @@ const AP_Param::Info Copter::var_info[] = {
     // @Path: ../libraries/AP_GPS/AP_GPS.cpp
     GOBJECT(gps, "GPS", AP_GPS),
 
+    // POD driver
+    // @Group: POD
+    // @Path: ../libraries/AP_Pod/AP_Pod.cpp
+    //GOBJECT(pod, "POD", AP_Pod),
+
     // @Group: SCHED_
     // @Path: ../libraries/AP_Scheduler/AP_Scheduler.cpp
     GOBJECT(scheduler, "SCHED_", AP_Scheduler),
@@ -1168,7 +1173,7 @@ const AP_Param::GroupInfo ParametersG2::var_info[] = {
     // @Units: s
     // @Range: 0 5
     // @User: Advanced
-    AP_GROUPINFO("STAR_R_CM", 63, ParametersG2, star_radius_cm, 1000),
+    //AP_GROUPINFO("STAR_R_CM", 63, ParametersG2, star_radius_cm, 1000),
 
     AP_GROUPEND
 };

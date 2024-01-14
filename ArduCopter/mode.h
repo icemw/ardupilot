@@ -39,7 +39,7 @@ public:
         AUTOROTATE =   26,  // Autonomous autorotation
         AUTO_RTL =     27,  // Auto RTL, this is not a true mode, AUTO will report as this mode if entered to perform a DO_LAND_START Landing sequence
         TURTLE =       28,  // Flip over after crash
-        DRAWSTAR  =    29,  // automatic fly with star
+        TRACK  =    29,  // automatic fly with star
         // Mode number 127 reserved for the "drone show mode" in the Skybrush
         // fork at https://github.com/skybrush-io/ardupilot
     };
@@ -1099,12 +1099,12 @@ private:
     bool _paused;
 };
 
-class ModeDrawStar : public Mode {
+class ModeTrack : public Mode {
 
 public:
     // inherit constructor
     using Mode::Mode;
-    Number mode_number() const override { return Number::DRAWSTAR; }
+    Number mode_number() const override { return Number::TRACK; }
 
     bool init(bool ignore_checks) override;
     void run() override;
@@ -1119,19 +1119,21 @@ public:
 
 protected:
 
-    const char *name() const override { return "DRAWSTAR"; }
-    const char *name4() const override { return "STAR"; }
+    const char *name() const override { return "TRACK"; }
+    const char *name4() const override { return "TRAK"; }
 
 private:
 
-    Vector3f path[10];
-    int path_num;
-
-    void generate_path();
+    Vector3f track_dest;//目标位置
+    //Vector3f current_dest;//当前需要到达的位置
+    //Vector3f next_dest;//下一步需要到达的位置
+    //Vector3f path[];
+    bool finish;//是否抵达目标
 
     // wp controller
     void pos_control_start();
     void pos_control_run();
+    void generate_dest(Vector3f target_loc); 
 };
 
 class ModeGuidedNoGPS : public ModeGuided {

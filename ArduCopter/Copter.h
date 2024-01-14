@@ -1025,8 +1025,8 @@ private:
 #if MODE_TURTLE_ENABLED == ENABLED
     ModeTurtle mode_turtle;
 #endif
-#if MODE_DRAWSTAR_ENABLED == ENABLED
-    ModeDrawStar mode_drawstar;
+#if MODE_TRACK_ENABLED == ENABLED
+    ModeTrack mode_track;
 #endif
 
     // mode.cpp
