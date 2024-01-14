@@ -30,74 +30,71 @@ void AP_Pod::init(const AP_SerialManager& serial_manager)
 
 void AP_Pod::update()
 {
-    // if(_port == NULL)
-    //     return false;
+    if(_port != NULL){
+        int16_t numc = _port->available();
+        uint8_t data;
+        uint8_t checksum = 0;
 
-    int16_t numc = _port->available();
-    uint8_t data;
-    uint8_t checksum = 0;
+        for (int16_t i = 0; i < numc; i++) {
+            data = _port->read();
 
-    for (int16_t i = 0; i < numc; i++) {
-        data = _port->read();
+            switch(_step) {
+            case 0:
+                if(data == 0xEE)
+                    _step = 1;
+                break;
 
-        switch(_step) {
-        case 0:
-            if(data == 0xEE)
-                _step = 1;
-            break;
-
-        case 1:
-            if(data == 0x90)
-                _step = 2;
+            case 1:
+                if(data == 0x90)
+                    _step = 2;
             else
                 _step = 0;
             break;
 
-        case 16:
-            checksum += data;
-            angle_roll_temp = data;
-            _step = 17;
-            break;
+            case 16:
+                checksum += data;
+                angle_roll_temp = data;
+                _step = 17;
+                break;
 
-        case 17:
-            checksum += data;
-            angle_roll_temp |= data << 8;
-            _step = 18;
-            break;
+            case 17:
+                checksum += data;
+                angle_roll_temp |= data << 8;
+                _step = 18;
+                break;
 
-        case 18:
-            checksum += data;
-            angle_pitch_temp = data;
-            _step = 19;
-            break;
+            case 18:
+                checksum += data;
+                angle_pitch_temp = data;
+                _step = 19;
+                break;
 
-        case 19:
-            checksum += data;
-            angle_pitch_temp |= data << 8;
-            _step = 20;
-            break;
-        
-        
-        case 2:case 3:case 4:case 5:case 6:case 7:case 8:case 9:case 10:
-        case 11:case 12:case 13:case 14:case 15:case 20:case 21:case 22:
-        case 23:case 24:case 25:case 26:case 27:case 28:case 29:case 30:
-            checksum += data;
-            _step += 1;
-            break;
+            case 19:
+                checksum += data;
+                angle_pitch_temp |= data << 8;
+                _step = 20;
+                break;
             
-        case 31:
-            if(checksum == data) {
-                angle_pitch = angle_pitch_temp;
-                angle_roll = angle_roll_temp;
-                last_frame_ms = AP_HAL::millis();
-                // return true;
-            }
-            break;
+            
+            case 2:case 3:case 4:case 5:case 6:case 7:case 8:case 9:case 10:
+            case 11:case 12:case 13:case 14:case 15:case 20:case 21:case 22:
+            case 23:case 24:case 25:case 26:case 27:case 28:case 29:case 30:
+                checksum += data;
+                _step += 1;
+                break;
+                
+            case 31:
+                if(checksum == data) {
+                    angle_pitch = angle_pitch_temp;
+                    angle_roll = angle_roll_temp;
+                    last_frame_ms = AP_HAL::millis();
+                    // return true;
+                }
+                break;
 
-        default:
-            _step = 0;
+            default:
+                _step = 0;
+            }
         }
     }
-
-    // return false;
 }

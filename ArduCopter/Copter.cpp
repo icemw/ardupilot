@@ -257,7 +257,7 @@ const AP_Scheduler::Task Copter::scheduler_tasks[] = {
     SCHED_TASK_CLASS(AP_Stats,             &copter.g2.stats,            update,           1, 100, 171),
 #endif
 
-    SCHED_TASK_CLASS(AP_Pod,               &copter.pod,                 update,          400,   100, 10),
+    SCHED_TASK_CLASS(AP_Pod,               &copter.pod,                 update,          400,   100, 174),
 };
 
 void Copter::get_scheduler_tasks(const AP_Scheduler::Task *&tasks,
