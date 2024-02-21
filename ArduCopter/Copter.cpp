@@ -647,7 +647,7 @@ void Copter::one_hz_loop()
     AP_Notify::flags.flying = !ap.land_complete;
 
     gcs().send_text(MAV_SEVERITY_CRITICAL, "Pod roll angle: %d pitch angle: %d",
-    pod.angle_roll , pod.angle_pitch);
+    pod.angle_yaw , pod.angle_pitch);
 }
 
 void Copter::init_simple_bearing()

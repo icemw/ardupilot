@@ -1125,15 +1125,13 @@ protected:
 private:
 
     Vector3f track_dest;//目标位置
-    //Vector3f current_dest;//当前需要到达的位置
-    //Vector3f next_dest;//下一步需要到达的位置
-    //Vector3f path[];
     bool finish;//是否抵达目标
+    Vector3f loiter_position;//悬停位置
 
     // wp controller
     void pos_control_start();
     void pos_control_run();
-    void generate_dest(Vector3f target_loc); 
+    void generate_dest(AP_Pod pod); 
 };
 
 class ModeGuidedNoGPS : public ModeGuided {

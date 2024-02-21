@@ -53,13 +53,13 @@ void AP_Pod::update()
 
             case 16:
                 checksum += data;
-                angle_roll_temp = data;
+                angle_yaw_temp = data;
                 _step = 17;
                 break;
 
             case 17:
                 checksum += data;
-                angle_roll_temp |= data << 8;
+                angle_yaw_temp |= data << 8;
                 _step = 18;
                 break;
 
@@ -86,7 +86,7 @@ void AP_Pod::update()
             case 31:
                 if(checksum == data) {
                     angle_pitch = angle_pitch_temp;
-                    angle_roll = angle_roll_temp;
+                    angle_yaw = angle_yaw_temp;
                     last_frame_ms = AP_HAL::millis();
                     // return true;
                 }

@@ -33,7 +33,7 @@ public:
     // update flight control mode. The control mode is vehicle type specific
     void update(void);
 
-    int16_t angle_roll; //横滚姿态角
+    int16_t angle_yaw; //偏航姿态角
     int16_t angle_pitch; //俯仰姿态角
 
     uint32_t last_frame_ms;
@@ -43,6 +43,6 @@ private:
 
     uint8_t _step;
 
-    int16_t angle_roll_temp;
+    int16_t angle_yaw_temp;
     int16_t angle_pitch_temp;
 };
