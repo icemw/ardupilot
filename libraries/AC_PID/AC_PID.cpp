@@ -342,7 +342,7 @@ void AC_PID::set_integrator(float integrator)
 {
     _integrator = constrain_float(integrator, -_kimax, _kimax);
 }
-
+//清除积分项，按时间比例清除
 void AC_PID::relax_integrator(float integrator, float dt, float time_constant)
 {
     integrator = constrain_float(integrator, -_kimax, _kimax);

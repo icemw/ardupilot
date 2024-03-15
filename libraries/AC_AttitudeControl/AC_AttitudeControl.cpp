@@ -159,7 +159,7 @@ constexpr Vector3f AC_AttitudeControl::VECTORF_111;
 float AC_AttitudeControl::get_slew_yaw_max_degs() const
 {
     if (!is_positive(_ang_vel_yaw_max)) {
-        return _slew_yaw * 0.01;
+        return _slew_yaw * 0.01;    //_slew_yaw默认值6000
     }
     return MIN(_ang_vel_yaw_max, _slew_yaw * 0.01);
 }
@@ -173,7 +173,7 @@ void AC_AttitudeControl::relax_attitude_controllers()
     _attitude_ang_error.initialise();
 
     // Initialize the angular rate variables to the current rate
-    _ang_vel_target = _ahrs.get_gyro();
+    _ang_vel_target = _ahrs.get_gyro(); //陀螺仪向量
     ang_vel_to_euler_rate(_euler_angle_target, _ang_vel_target, _euler_rate_target);
     _ang_vel_body = _ahrs.get_gyro();
 
@@ -212,7 +212,7 @@ void AC_AttitudeControl::reset_rate_controller_I_terms_smoothly()
 // fed into the angle controller and the output of the angle controller summed at the input of the rate controllers.
 // By feeding the target angular velocity directly into the rate controllers the measured and target attitudes
 // remain very close together.
-//
+
 // All input functions below follow the same procedure
 // 1. define the desired attitude the aircraft should attempt to achieve using the input variables
 // 2. using the desired attitude and input variables, define the target angular velocity so that it should
@@ -234,7 +234,7 @@ void AC_AttitudeControl::input_quaternion(Quaternion& attitude_desired_quat, Vec
     Vector3f attitude_error_angle;
     attitude_error_quat.to_axis_angle(attitude_error_angle);
 
-    // Limit the angular velocity
+    // Limit the angular velocity, 在旋翼中三个max值均为0
     ang_vel_limit(ang_vel_target, radians(_ang_vel_roll_max), radians(_ang_vel_pitch_max), radians(_ang_vel_yaw_max));
 
     if (_rate_bf_ff_enabled) {
@@ -268,7 +268,7 @@ void AC_AttitudeControl::input_quaternion(Quaternion& attitude_desired_quat, Vec
 // Command an euler roll and pitch angle and an euler yaw rate with angular velocity feedforward and smoothing
 void AC_AttitudeControl::input_euler_angle_roll_pitch_euler_rate_yaw(float euler_roll_angle_cd, float euler_pitch_angle_cd, float euler_yaw_rate_cds)
 {
-    // Convert from centidegrees on public interface to radians
+    // Convert from centidegrees(厘度) on public interface to radians
     float euler_roll_angle = radians(euler_roll_angle_cd * 0.01f);
     float euler_pitch_angle = radians(euler_pitch_angle_cd * 0.01f);
     float euler_yaw_rate = radians(euler_yaw_rate_cds * 0.01f);
@@ -454,6 +454,7 @@ void AC_AttitudeControl::input_rate_bf_roll_pitch_yaw(float roll_rate_bf_cds, fl
     attitude_controller_run_quat();
 }
 
+//调用一次控制函数运行一次，在run()中调用，频率相同，与dt相对应
 // Command an angular velocity with angular velocity smoothing using rate loops only with no attitude loop stabilization
 void AC_AttitudeControl::input_rate_bf_roll_pitch_yaw_2(float roll_rate_bf_cds, float pitch_rate_bf_cds, float yaw_rate_bf_cds)
 {
@@ -474,7 +475,7 @@ void AC_AttitudeControl::input_rate_bf_roll_pitch_yaw_2(float roll_rate_bf_cds, 
     _attitude_target.to_euler(_euler_angle_target.x, _euler_angle_target.y, _euler_angle_target.z);
     // Convert body-frame angular velocity into euler angle derivative of desired attitude
     ang_vel_to_euler_rate(_euler_angle_target, _ang_vel_target, _euler_rate_target);
-    _ang_vel_body = _ang_vel_target;
+    _ang_vel_body = _ang_vel_target;    //在间隔dt后经过加速达到_ang_vel_target，机体角速度达到目标角速度，但此时角度与目标角度不同
 }
 
 // Command an angular velocity with angular velocity smoothing using rate loops only with integrated rate error stabilization

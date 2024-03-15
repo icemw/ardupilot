@@ -1127,11 +1127,14 @@ private:
     Vector3f track_dest;//目标位置
     bool finish;//是否抵达目标
     Vector3f loiter_position;//悬停位置
+    uint32_t last_set_pos_target_time_ms;//上次更新目标位置时间
+    uint32_t last_pod_change_time_ms;
 
     // wp controller
     void pos_control_start();
     void pos_control_run();
-    void generate_dest(AP_Pod pod); 
+    void wp_control_run();
+    void generate_dest(int16_t pitch, int16_t yaw); 
 };
 
 class ModeGuidedNoGPS : public ModeGuided {
